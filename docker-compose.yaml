@@ -1,0 +1,38 @@
+
+version: "3.7"
+services:
+
+  flights-api:
+    build:
+      dockerfile: Dockerfile
+      context: ./flights
+    container_name: flights-api
+    stdin_open: true
+    networks:
+      - backend
+    volumes:
+      - ./flights:/app
+      - /app/node_modules
+    ports:
+      - "8000:3000"
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-latest
+    restart: always                       # always restart
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: 'qwerty'     # password for root user
+    ports:
+      - '3306:3306'                       # host port 3306 is mapper to docker port 3306
+    expose:
+      - '3306'
+    volumes:
+      - ./mysql-db:/var/lib/mysql
+
+volumes:
+        mysql-db:
+
+networks:
+    backend:
