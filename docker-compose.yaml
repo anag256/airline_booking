@@ -8,6 +8,8 @@ services:
       context: ./flights
     container_name: flights-api
     stdin_open: true
+    environment:
+      DB_HOST: db
     networks:
       - backend
     volumes:
@@ -15,10 +17,12 @@ services:
       - /app/node_modules
     ports:
       - "8000:3000"
+    depends_on:
+      - db
 
-  mysql:
+  db:
     image: mysql:latest
-    container_name: mysql-latest
+    container_name: db
     restart: always                       # always restart
     networks:
       - backend
